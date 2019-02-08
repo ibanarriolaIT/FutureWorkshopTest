@@ -8,10 +8,16 @@ import android.app.Application;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import com.futureworkshops.codetest.android.BuildConfig;
+import com.futureworkshops.codetest.android.data.network.server.MockServer;
+import com.futureworkshops.codetest.android.domain.dagger.ApplicationComponent;
+import com.futureworkshops.codetest.android.domain.dagger.DaggerApplicationComponent;
+
+import dagger.android.AndroidInjector;
+import dagger.android.support.DaggerApplication;
 import timber.log.Timber;
 
 
-public class FwTestApp extends Application {
+public class FwTestApp extends DaggerApplication {
 
     @Override
     public void onCreate() {
@@ -31,8 +37,15 @@ public class FwTestApp extends Application {
 
 
     private void initMockServer() {
-        // FIXME :  you need to call mockServer.start() before using it
+        MockServer mockServer = new MockServer(this);
+        mockServer.start();
+    }
 
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        ApplicationComponent applicationComponent = DaggerApplicationComponent.builder().application(this).build();
+        applicationComponent.inject(this);
+        return applicationComponent;
     }
 
     class ReleaseLogTree extends Timber.Tree {

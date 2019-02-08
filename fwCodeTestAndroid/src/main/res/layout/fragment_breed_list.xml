@@ -42,7 +42,6 @@
       tools:itemCount="13"
       tools:layoutManager="android.support.v7.widget.GridLayoutManager"
       tools:listitem="@layout/list_item_breed"
-
       tools:spanCount="2"
     />
 

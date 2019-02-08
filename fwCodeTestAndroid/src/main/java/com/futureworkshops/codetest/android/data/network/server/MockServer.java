@@ -14,6 +14,7 @@ import okhttp3.mockwebserver.MockResponse;
 
 import java.util.concurrent.TimeUnit;
 
+import static io.appflate.restmock.utils.RequestMatchers.hasQueryParameters;
 import static io.appflate.restmock.utils.RequestMatchers.pathContains;
 
 

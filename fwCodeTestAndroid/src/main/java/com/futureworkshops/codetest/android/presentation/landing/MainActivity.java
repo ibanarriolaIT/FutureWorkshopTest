@@ -18,11 +18,21 @@ import butterknife.ButterKnife;
 import com.futureworkshops.codetest.android.R;
 import com.futureworkshops.codetest.android.presentation.breeds.favorite.FavoriteBreedsFragment;
 import com.futureworkshops.codetest.android.presentation.breeds.list.view.BreedsListFragment;
+import com.futureworkshops.codetest.android.presentation.common.BaseView;
+
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerAppCompatActivity;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements
+public class MainActivity extends DaggerAppCompatActivity implements
         OnNavigationItemSelectedListener,
-        OnNavigationItemReselectedListener {
+        OnNavigationItemReselectedListener,
+        MainPresenter.View,
+        BaseView {
+
+    @Inject
+    MainPresenter mainPresenter;
 
     @BindView(R.id.bottomNavigation)
     BottomNavigationView bottomNavigationView;
@@ -36,8 +46,14 @@ public class MainActivity extends AppCompatActivity implements
         postponeEnterTransition();
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        onInit();
         initBottomNavigation();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mainPresenter.detachView();
     }
 
     @Override
@@ -50,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.important_action:
-                // FIXME: 03/10/2018  this is where you need to call performImportantOperation()
+                mainPresenter.callImportantOperation();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -124,5 +140,20 @@ public class MainActivity extends AppCompatActivity implements
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setOnNavigationItemReselectedListener(this);
 
+    }
+
+    @Override
+    public void onImportantOperationOk() {
+
+    }
+
+    @Override
+    public void onImportantOperationError() {
+
+    }
+
+    @Override
+    public void onInit() {
+        mainPresenter.attachView(this);
     }
 }

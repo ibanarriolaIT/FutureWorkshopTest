@@ -7,6 +7,7 @@ package com.futureworkshops.codetest.android.domain.dagger;
 import com.futureworkshops.codetest.android.BuildConfig;
 import com.futureworkshops.codetest.android.data.network.RestManager;
 import com.futureworkshops.codetest.android.data.network.rx.scheduler.SchedulersProvider;
+import com.futureworkshops.codetest.android.data.network.rx.scheduler.WorkerSchedulerProvider;
 import com.google.gson.Gson;
 import dagger.Module;
 import dagger.Provides;
@@ -22,6 +23,11 @@ import javax.inject.Singleton;
 
 @Module
 public class NetModule {
+
+    @Provides
+    SchedulersProvider provideSchedulersProvider() {
+        return new WorkerSchedulerProvider();
+    }
 
     @Singleton
     @Provides

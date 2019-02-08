@@ -5,16 +5,23 @@
 package com.futureworkshops.codetest.android.domain.dagger;
 
 import android.content.Context;
+
 import com.futureworkshops.codetest.android.data.network.server.MockServer;
-import dagger.Module;
-import dagger.Provides;
+import com.futureworkshops.codetest.android.presentation.FwTestApp;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import dagger.Module;
+import dagger.Provides;
+
 @Module
 public class ServerModule {
 
+    @Provides
+    static Context provideContext(FwTestApp application) {
+        return application.getApplicationContext();
+    }
 
     @Singleton
     @Provides
