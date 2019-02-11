@@ -11,6 +11,8 @@ import com.futureworkshops.codetest.android.data.network.dto.BreedsListDto;
 import com.futureworkshops.codetest.android.data.network.rx.scheduler.SchedulersProvider;
 import com.futureworkshops.codetest.android.data.network.rx.transformers.CompletableWorkerTransformer;
 import com.futureworkshops.codetest.android.data.network.rx.transformers.SingleWorkerTransformer;
+import com.futureworkshops.codetest.android.domain.model.Login;
+
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import retrofit2.Retrofit;
@@ -43,8 +45,8 @@ public class RestManager {
                 .compose(new CompletableWorkerTransformer(schedulersProvider));
     }
 
-    public Single<BreedStatsDto> getStats(long id) {
-        return restService.getStats(id)
+    public Single<Login> login(String user, String pass) {
+        return restService.login(user, pass)
                 .compose(new SingleWorkerTransformer<>(schedulersProvider));
     }
 

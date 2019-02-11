@@ -10,9 +10,12 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemReselectedListener;
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.futureworkshops.codetest.android.R;
@@ -144,16 +147,24 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Override
     public void onImportantOperationOk() {
-
+        //it will never be ok
     }
 
     @Override
-    public void onImportantOperationError() {
-
+    public void onImportantOperationError(String error) {
+        Toast.makeText(this, error, Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onInit() {
         mainPresenter.attachView(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+        }
     }
 }

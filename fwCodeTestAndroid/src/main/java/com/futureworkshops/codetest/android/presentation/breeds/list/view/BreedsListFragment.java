@@ -7,7 +7,6 @@ package com.futureworkshops.codetest.android.presentation.breeds.list.view;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.futureworkshops.codetest.android.R;
+import com.futureworkshops.codetest.android.data.persistence.BreedEntity;
 import com.futureworkshops.codetest.android.domain.model.Breed;
+import com.futureworkshops.codetest.android.presentation.breeds.adapter.BreedsListAdapter;
 import com.futureworkshops.codetest.android.presentation.breeds.details.BreedDetailsFragment;
 import com.futureworkshops.codetest.android.presentation.common.BaseView;
 
@@ -76,14 +77,15 @@ public class BreedsListFragment extends DaggerFragment
 
     @Override
     public void onError(Throwable error) {
-
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
     public void onMessageItemClick(Breed breed) {
+        BreedEntity breedEntity = new BreedEntity(breed.id(), breed.name(), breed.description(), breed.photoUrl());
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, BreedDetailsFragment.newInstance(breed), "BREEDS_ROOT")
+                .replace(R.id.fragmentContainer, BreedDetailsFragment.newInstance(breedEntity), "BREEDS_ROOT")
+                .addToBackStack("BREEDS_ROOT")
                 .commit();
     }
 }

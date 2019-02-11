@@ -3,7 +3,9 @@ package com.futureworkshops.codetest.android.presentation.landing;
 import com.futureworkshops.codetest.android.data.network.RestManager;
 import com.futureworkshops.codetest.android.data.network.rx.scheduler.SchedulersProvider;
 import com.futureworkshops.codetest.android.data.network.rx.scheduler.WorkerSchedulerProvider;
+import com.futureworkshops.codetest.android.domain.repositories.ImportantOperationRepository;
 import com.futureworkshops.codetest.android.presentation.common.BasePresenter;
+import com.futureworkshops.codetest.android.presentation.utils.ErrorHandler;
 
 import javax.inject.Inject;
 
@@ -13,23 +15,23 @@ import retrofit2.Retrofit;
 
 public class MainPresenter extends BasePresenter {
 
-    RestManager restManager;
+    ImportantOperationRepository importantOperationRepository;
 
-    public MainPresenter(RestManager restManager) {
-        this.restManager = restManager;
+    public MainPresenter(ImportantOperationRepository importantOperationRepository) {
+        this.importantOperationRepository = importantOperationRepository;
     }
 
     public void callImportantOperation() {
-        restManager.performImportantOperation()
+        importantOperationRepository.performImportantOperation()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> ((View) getView()).onImportantOperationOk(),
-                        throwable -> ((View) getView()).onImportantOperationError());
+                        throwable -> ((View) getView()).onImportantOperationError(ErrorHandler.getErrorMessage(throwable)));
     }
 
     public interface View {
         void onImportantOperationOk();
 
-        void onImportantOperationError();
+        void onImportantOperationError(String error);
     }
 }

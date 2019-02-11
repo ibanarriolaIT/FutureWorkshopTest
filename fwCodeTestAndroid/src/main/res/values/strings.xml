@@ -1,8 +1,20 @@
 <resources>
-    <string name="app_name">FW-CodeTest-Android</string>
+   <string name="app_name">FW-CodeTest-Android</string>
 
-    <string name="title_search">Search</string>
-    <string name="title_favorites">Favourites</string>
-    <string name="title_breeds">Breeds</string>
-    <string name="important_action">Important Action</string>
+   <string name="title_search">Search</string>
+   <string name="title_favorites">Favourites</string>
+   <string name="title_breeds">Breeds</string>
+   <string name="important_action">Important Action</string>
+   <string name="user_name">User</string>
+   <string name="password_name">Password</string>
+   <string name="login">Login</string>
+   <string name="user_hint">iban</string>
+   <string name="pass_hint">12345678</string>
+   <string name="login_empty">You must fill empty fields</string>
+   <string name="stats">Stats</string>
+   <string name="adaptability">Adaptability: %s</string>
+   <string name="friendliness">Friendliness: %s</string>
+   <string name="grooming">Grooming: %s</string>
+   <string name="trainability">Trainability: %s</string>
+   <string name="exercise_needs">Exercise needs: %s</string>
 </resources>

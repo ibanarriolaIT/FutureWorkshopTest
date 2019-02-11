@@ -1,4 +1,4 @@
-package com.futureworkshops.codetest.android.presentation.breeds.list.view;
+package com.futureworkshops.codetest.android.presentation.breeds.adapter;
 
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;

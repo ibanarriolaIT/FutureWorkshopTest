@@ -6,20 +6,31 @@ package com.futureworkshops.codetest.android.domain.dagger;
 
 import com.futureworkshops.codetest.android.BuildConfig;
 import com.futureworkshops.codetest.android.data.network.RestManager;
+import com.futureworkshops.codetest.android.data.network.XMLRestManager;
 import com.futureworkshops.codetest.android.data.network.rx.scheduler.SchedulersProvider;
 import com.futureworkshops.codetest.android.data.network.rx.scheduler.WorkerSchedulerProvider;
+import com.futureworkshops.codetest.android.domain.repositories.BreedRepository;
+import com.futureworkshops.codetest.android.domain.repositories.ImportantOperationRepository;
+import com.futureworkshops.codetest.android.domain.repositories.LoginRepository;
+import com.futureworkshops.codetest.android.domain.repositories.StatsRepository;
 import com.google.gson.Gson;
+
+import org.simpleframework.xml.convert.AnnotationStrategy;
+import org.simpleframework.xml.core.Persister;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 @Module
 public class NetModule {
@@ -32,25 +43,46 @@ public class NetModule {
     @Singleton
     @Provides
     RestManager providesRestManager(SchedulersProvider schedulersProvider,
-                                    Retrofit retrofit) {
+                                    @Named("JsonRetrofit") Retrofit retrofit) {
         return new RestManager(schedulersProvider, retrofit);
     }
 
-
     @Singleton
     @Provides
-    Retrofit providesRetrofit(@Named("endpoint") String endpointUrl,
+    XMLRestManager providesXMLRestManager(SchedulersProvider schedulersProvider,
+                                          @Named("XMLRetrofit") Retrofit retrofit) {
+        return new XMLRestManager(schedulersProvider, retrofit);
+    }
+
+    @Provides
+    @Named("JsonRetrofit")
+    Retrofit providesJsonRetrofit(@Named("endpoint") String endpointUrl,
                               Interceptor loggingInterceptor) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .build();
-
         return new Retrofit.Builder()
                 .baseUrl(endpointUrl)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(new Gson()))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
+    }
+
+    @Provides
+    @Named("XMLRetrofit")
+    Retrofit providesXMLRetrofit(@Named("endpoint") String endpointUrl,
+                              Interceptor loggingInterceptor) {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build();
+            return new Retrofit.Builder()
+                    .baseUrl(endpointUrl)
+                    .client(client)
+                    .addConverterFactory(SimpleXmlConverterFactory
+                            .createNonStrict(new Persister(new AnnotationStrategy())))
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build();
     }
 
 
@@ -64,5 +96,29 @@ public class NetModule {
             httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.NONE);
         }
         return httpLoggingInterceptor;
+    }
+
+    @Provides
+    @Singleton
+    LoginRepository providesLoginRepository(RestManager restManager) {
+        return new LoginRepository(restManager);
+    }
+
+    @Provides
+    @Singleton
+    BreedRepository providesBreedRepository(RestManager restManager) {
+        return new BreedRepository(restManager);
+    }
+
+    @Provides
+    @Singleton
+    StatsRepository providesStatsRepository(XMLRestManager restManager) {
+        return new StatsRepository(restManager);
+    }
+
+    @Provides
+    @Singleton
+    ImportantOperationRepository providesImportantOperationRepository(RestManager restManager) {
+        return new ImportantOperationRepository(restManager);
     }
 }

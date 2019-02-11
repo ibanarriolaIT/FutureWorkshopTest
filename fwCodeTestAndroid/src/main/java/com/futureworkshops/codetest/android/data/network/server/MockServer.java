@@ -5,6 +5,10 @@
 package com.futureworkshops.codetest.android.data.network.server;
 
 import android.content.Context;
+import android.util.Log;
+
+import java.util.concurrent.TimeUnit;
+
 import io.appflate.restmock.MockAnswer;
 import io.appflate.restmock.RESTMockServer;
 import io.appflate.restmock.RESTMockServerStarter;
@@ -12,10 +16,8 @@ import io.appflate.restmock.android.AndroidAssetsFileParser;
 import io.appflate.restmock.android.AndroidLogger;
 import okhttp3.mockwebserver.MockResponse;
 
-import java.util.concurrent.TimeUnit;
-
-import static io.appflate.restmock.utils.RequestMatchers.hasQueryParameters;
 import static io.appflate.restmock.utils.RequestMatchers.pathContains;
+import static io.appflate.restmock.utils.RequestMatchers.pathDoesNotContain;
 
 
 public class MockServer {
@@ -44,12 +46,33 @@ public class MockServer {
 
                     try {
                         String body = mocksFileParser.readJsonFile(id + ".xml");
-
+                        Log.d("body text", body);
                         return new MockResponse()
                                 .setResponseCode(200)
                                 .setHeader("Content-type", "application/xml")
                                 .setBody(body)
                                 .setBodyDelay(DELAY_SEC, TimeUnit.SECONDS);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException("The mock server setup failed");
+                    }
+                });
+
+        RESTMockServer.whenGET(pathContains("login"))
+                .thenAnswer((MockAnswer) request -> {
+                    try {
+                        if (request.getPath().equals("/login?user=iban&pass=12345678")) {
+                            return new MockResponse()
+                                    .setResponseCode(200)
+                                    .setHeader("Content-type", "application/json")
+                                    .setBody("{ \"resut\" : \"success\" }")
+                                    .setBodyDelay(DELAY_SEC, TimeUnit.SECONDS);
+                        }
+                        return new MockResponse()
+                                .setResponseCode(401)
+                                .setBody("{\"error\": \"incorrect username or password\"}")
+                                .setBodyDelay(DELAY_SEC, TimeUnit.SECONDS);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                         throw new RuntimeException("The mock server setup failed");
@@ -62,7 +85,6 @@ public class MockServer {
                         .setBody("{\"error\": \"The world is ending, cannot process request\"}")
                         .setBodyDelay(DELAY_SEC, TimeUnit.SECONDS)
                 );
-
     }
 
 

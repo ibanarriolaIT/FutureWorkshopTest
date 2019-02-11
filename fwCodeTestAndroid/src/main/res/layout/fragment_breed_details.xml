@@ -7,7 +7,10 @@
    <data>
       <variable
          name="breed"
-         type="com.futureworkshops.codetest.android.domain.model.Breed"/>
+         type="com.futureworkshops.codetest.android.data.persistence.BreedEntity"/>
+      <variable
+         name="stats"
+         type="com.futureworkshops.codetest.android.domain.model.BreedStats"/>
    </data>
    <android.support.design.widget.CoordinatorLayout
       android:layout_width="match_parent"
@@ -91,6 +94,46 @@
                      android:text="@{breed.description}"
                      android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
+                  <TextView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                     android:layout_marginRight="@dimen/activity_horizontal_margin"
+                     android:layout_marginTop="@dimen/activity_horizontal_margin"
+                     android:text="@string/stats"
+                     android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                  <TextView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                     android:text="@{@string/adaptability(stats.adaptability)}"/>
+                  <TextView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                     android:text="@{@string/friendliness(stats.friendliness)}"/>
+                  <TextView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                     android:text="@{@string/grooming(stats.grooming)}"/>
+                  <TextView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                     android:text="@{@string/trainability(stats.trainability)}"/>
+                  <TextView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                     android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                     android:text="@{@string/exercise_needs(stats.exercise_needs)}" />
                </LinearLayout>
 
             </android.support.v7.widget.CardView>
