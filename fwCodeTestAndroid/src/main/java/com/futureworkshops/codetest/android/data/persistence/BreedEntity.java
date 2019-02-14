@@ -9,7 +9,7 @@ import com.futureworkshops.codetest.android.domain.model.Breed;
 
 
 @Entity
-public class BreedEntity extends Breed {
+public class BreedEntity {
 
     @PrimaryKey
     public long id;
@@ -27,56 +27,19 @@ public class BreedEntity extends Breed {
         this.photoUrl = photoUrl;
     }
 
-    protected BreedEntity(Parcel in) {
-        id = in.readLong();
-        name = in.readString();
-        description = in.readString();
-        photoUrl = in.readString();
+    public BreedEntity(Breed breed) {
+        id = breed.id();
+        name = breed.name();
+        description = breed.description();
+        photoUrl = breed.photoUrl();
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeString(photoUrl);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    public static final Creator<BreedEntity> CREATOR = new Creator<BreedEntity>() {
-        @Override
-        public BreedEntity createFromParcel(Parcel in) {
-            return new BreedEntity(in);
-        }
-
-        @Override
-        public BreedEntity[] newArray(int size) {
-            return new BreedEntity[size];
-        }
-    };
-
-    @Override
-    public long id() {
-        return id;
-    }
-
-    @Override
-    public String name() {
-        return name;
-    }
-
-    @Override
-    public String description() {
-        return description;
-    }
-
-    @Override
-    public String photoUrl() {
-        return photoUrl;
+    public Breed toBreed() {
+        return Breed.builder()
+                .id(id)
+                .name(name)
+                .description(description)
+                .photoUrl(photoUrl).build();
     }
 
 }

@@ -8,7 +8,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.futureworkshops.codetest.android.R;
-import com.futureworkshops.codetest.android.presentation.common.BaseView;
 import com.futureworkshops.codetest.android.presentation.landing.MainActivity;
 
 import javax.inject.Inject;
@@ -18,7 +17,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class LoginActivity extends DaggerAppCompatActivity implements BaseView, LoginPresenter.View {
+public class LoginActivity extends DaggerAppCompatActivity
+        implements LoginPresenter.View {
 
     @BindView(R.id.login_user)
     EditText user;
@@ -32,8 +32,15 @@ public class LoginActivity extends DaggerAppCompatActivity implements BaseView, 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
+        getSupportActionBar().setTitle(R.string.login);
         ButterKnife.bind(this);
         onInit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        loginPresenter.detachView();
     }
 
     @Override

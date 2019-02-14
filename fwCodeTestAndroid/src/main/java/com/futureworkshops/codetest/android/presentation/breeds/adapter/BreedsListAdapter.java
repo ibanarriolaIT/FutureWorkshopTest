@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.futureworkshops.codetest.android.R;
 import com.futureworkshops.codetest.android.databinding.ListItemBreedBinding;
@@ -36,7 +37,8 @@ public class BreedsListAdapter extends RecyclerView.Adapter<BreedsListAdapter.Br
     @Override
     public void onBindViewHolder(@NonNull BreedViewHolder holder, int position) {
         holder.binding.setBreed(breeds.get(position));
-        holder.binding.cardView.setOnClickListener(v -> listener.onMessageItemClick(breeds.get(position)));
+        holder.binding.breedImage.setTransitionName(breeds.get(position).name());
+        holder.binding.cardView.setOnClickListener(v -> listener.onMessageItemClick(breeds.get(position), holder.binding.breedImage));
     }
 
     @Override
@@ -60,6 +62,6 @@ public class BreedsListAdapter extends RecyclerView.Adapter<BreedsListAdapter.Br
 
     public interface OnItemClickListener {
 
-        void onMessageItemClick(Breed breed);
+        void onMessageItemClick(Breed breed, ImageView view);
     }
 }

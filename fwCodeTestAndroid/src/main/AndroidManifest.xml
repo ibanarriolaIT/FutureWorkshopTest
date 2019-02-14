@@ -12,7 +12,6 @@
       android:supportsRtl="true"
       android:theme="@style/FwTheme"
       android:usesCleartextTraffic="true">
-
       <activity
          android:name=".presentation.splashscreen.SplashActivity"
          android:noHistory="true"
@@ -27,12 +26,13 @@
       <activity
          android:name=".presentation.landing.MainActivity"
          android:exported="true"
-         android:screenOrientation="portrait" />
+         android:screenOrientation="portrait"
+         android:theme="@style/FwTheme"/>
       <activity
          android:name=".presentation.login.LoginActivity"
          android:exported="true"
          android:screenOrientation="portrait"
-         android:windowSoftInputMode="adjustPan"/>
+         android:windowSoftInputMode="adjustResize"/>
    </application>
 
 </manifest>

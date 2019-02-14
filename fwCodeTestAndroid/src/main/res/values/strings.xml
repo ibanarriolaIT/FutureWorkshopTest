@@ -4,6 +4,7 @@
    <string name="title_search">Search</string>
    <string name="title_favorites">Favourites</string>
    <string name="title_breeds">Breeds</string>
+   <string name="title_details">%s details</string>
    <string name="important_action">Important Action</string>
    <string name="user_name">User</string>
    <string name="password_name">Password</string>

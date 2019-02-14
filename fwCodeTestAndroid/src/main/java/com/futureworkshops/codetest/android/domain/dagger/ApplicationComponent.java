@@ -1,21 +1,19 @@
 package com.futureworkshops.codetest.android.domain.dagger;
 
-import android.content.Context;
-
+import com.futureworkshops.codetest.android.domain.dagger.module.RoomModule;
+import com.futureworkshops.codetest.android.domain.dagger.module.NetModule;
+import com.futureworkshops.codetest.android.domain.dagger.module.ServerModule;
 import com.futureworkshops.codetest.android.presentation.FwTestApp;
-import com.futureworkshops.codetest.android.presentation.landing.MainActivity;
 
 import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
-import dagger.Module;
-import dagger.Provides;
 import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 
 @Singleton
-@Component(modules = {AndroidSupportInjectionModule.class, InjectorBuilder.class, NetModule.class, ServerModule.class})
+@Component(modules = {AndroidSupportInjectionModule.class, InjectorBuilder.class, RoomModule.class, NetModule.class, ServerModule.class})
 public interface ApplicationComponent extends AndroidInjector<FwTestApp> {
 
     @Component.Builder

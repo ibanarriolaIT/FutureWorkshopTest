@@ -1,41 +1,30 @@
 package com.futureworkshops.codetest.android.presentation.breeds.favorite;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-
-import com.futureworkshops.codetest.android.data.persistence.BreedEntity;
-import com.futureworkshops.codetest.android.data.persistence.DatabaseClient;
 import com.futureworkshops.codetest.android.domain.model.Breed;
+import com.futureworkshops.codetest.android.domain.usecase.GetFavouriteBreeds;
 import com.futureworkshops.codetest.android.presentation.common.BasePresenter;
+import com.futureworkshops.codetest.android.presentation.common.BaseView;
 
 import java.util.List;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.reactivex.disposables.Disposable;
+
 
 public class FavouriteBreedsPresenter extends BasePresenter {
 
-    DatabaseClient databaseClient;
+    private final GetFavouriteBreeds getFavouriteBreeds;
 
-    public FavouriteBreedsPresenter(Context context) {
-        this.databaseClient = DatabaseClient.getInstance(context);
+    public FavouriteBreedsPresenter(GetFavouriteBreeds getFavouriteBreeds) {
+        this.getFavouriteBreeds = getFavouriteBreeds;
     }
-
 
     public void getFavourites() {
-        databaseClient.getBreedDatabase().breedDao().getAll()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .toObservable().flatMapIterable(breedEntities -> breedEntities)
-                .map(breedEntity -> Breed.builder()
-                        .id(breedEntity.id())
-                        .description(breedEntity.description())
-                        .name(breedEntity.name())
-                        .photoUrl(breedEntity.photoUrl()).build()).toList()
-                .subscribe(breedEntities -> ((View)getView()).onGetFavourites(breedEntities));
+        Disposable disposable = getFavouriteBreeds.execute()
+                .subscribe(breeds -> ((View) getView()).onGetFavourites(breeds));
+        addSubscription(disposable);
     }
 
-    public interface View {
+    public interface View extends BaseView {
         void onGetFavourites(List<Breed> breedEntity);
     }
 }

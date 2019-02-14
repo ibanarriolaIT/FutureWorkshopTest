@@ -78,11 +78,14 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
     testImplementation "android.arch.persistence.room:testing:1.1.1"
 
+    implementation 'com.android.support:design:28.0.0'
+
     annotationProcessor domainDependencies.autoValue
     compileOnly domainDependencies.autoValueAnnotations
     annotationProcessor domainDependencies.autoValueParcelable
 
     testImplementation testDependencies.junit
+    testImplementation testDependencies.mockito
     androidTestImplementation testDependencies.espressoCore
     androidTestImplementation testDependencies.testRunner
 

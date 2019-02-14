@@ -2,7 +2,7 @@
  * Copyright (c) 2018 FutureWorkshops. All rights reserved.
  */
 
-package com.futureworkshops.codetest.android.domain.dagger;
+package com.futureworkshops.codetest.android.domain.dagger.module;
 
 import com.futureworkshops.codetest.android.BuildConfig;
 import com.futureworkshops.codetest.android.data.network.RestManager;
@@ -13,6 +13,8 @@ import com.futureworkshops.codetest.android.domain.repositories.BreedRepository;
 import com.futureworkshops.codetest.android.domain.repositories.ImportantOperationRepository;
 import com.futureworkshops.codetest.android.domain.repositories.LoginRepository;
 import com.futureworkshops.codetest.android.domain.repositories.StatsRepository;
+import com.futureworkshops.codetest.android.domain.usecase.GetBreedStats;
+import com.futureworkshops.codetest.android.domain.usecase.GetBreedsList;
 import com.google.gson.Gson;
 
 import org.simpleframework.xml.convert.AnnotationStrategy;
@@ -23,7 +25,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -57,7 +58,7 @@ public class NetModule {
     @Provides
     @Named("JsonRetrofit")
     Retrofit providesJsonRetrofit(@Named("endpoint") String endpointUrl,
-                              Interceptor loggingInterceptor) {
+                                  Interceptor loggingInterceptor) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .build();
@@ -72,17 +73,17 @@ public class NetModule {
     @Provides
     @Named("XMLRetrofit")
     Retrofit providesXMLRetrofit(@Named("endpoint") String endpointUrl,
-                              Interceptor loggingInterceptor) {
+                                 Interceptor loggingInterceptor) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .build();
-            return new Retrofit.Builder()
-                    .baseUrl(endpointUrl)
-                    .client(client)
-                    .addConverterFactory(SimpleXmlConverterFactory
-                            .createNonStrict(new Persister(new AnnotationStrategy())))
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build();
+        return new Retrofit.Builder()
+                .baseUrl(endpointUrl)
+                .client(client)
+                .addConverterFactory(SimpleXmlConverterFactory
+                        .createNonStrict(new Persister(new AnnotationStrategy())))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build();
     }
 
 
@@ -121,4 +122,18 @@ public class NetModule {
     ImportantOperationRepository providesImportantOperationRepository(RestManager restManager) {
         return new ImportantOperationRepository(restManager);
     }
+
+    @Provides
+    @Singleton
+    GetBreedsList providesGetBreedsList(BreedRepository breedRepository) {
+        return new GetBreedsList(breedRepository);
+    }
+
+    @Provides
+    @Singleton
+    GetBreedStats providesGetBreedStats(StatsRepository statsRepository) {
+        return new GetBreedStats(statsRepository);
+    }
+
+
 }

@@ -7,13 +7,14 @@ package com.futureworkshops.codetest.android.presentation.splashscreen;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.futureworkshops.codetest.android.R;
-import com.futureworkshops.codetest.android.presentation.landing.MainActivity;
 import com.futureworkshops.codetest.android.presentation.login.LoginActivity;
 import com.github.jorgecastillo.FillableLoader;
 import com.github.jorgecastillo.State;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class SplashActivity extends AppCompatActivity {

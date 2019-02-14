@@ -11,7 +11,7 @@ import android.support.design.widget.BottomNavigationView.OnNavigationItemResele
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -19,7 +19,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.futureworkshops.codetest.android.R;
-import com.futureworkshops.codetest.android.presentation.breeds.favorite.FavoriteBreedsFragment;
+import com.futureworkshops.codetest.android.presentation.breeds.favorite.FavouriteBreedsFragment;
 import com.futureworkshops.codetest.android.presentation.breeds.list.view.BreedsListFragment;
 import com.futureworkshops.codetest.android.presentation.common.BaseView;
 
@@ -31,8 +31,7 @@ import timber.log.Timber;
 public class MainActivity extends DaggerAppCompatActivity implements
         OnNavigationItemSelectedListener,
         OnNavigationItemReselectedListener,
-        MainPresenter.View,
-        BaseView {
+        MainPresenter.View {
 
     @Inject
     MainPresenter mainPresenter;
@@ -41,7 +40,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
     BottomNavigationView bottomNavigationView;
 
     private BreedsListFragment breedsListFragment;
-    private FavoriteBreedsFragment favoriteBreedsFragment;
+    private FavouriteBreedsFragment favouriteBreedsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,11 +105,11 @@ public class MainActivity extends DaggerAppCompatActivity implements
     }
 
     private void showFavoritesFragment() {
-        if (favoriteBreedsFragment == null) {
-            favoriteBreedsFragment = FavoriteBreedsFragment.newInstance();
+        if (favouriteBreedsFragment == null) {
+            favouriteBreedsFragment = FavouriteBreedsFragment.newInstance();
         }
 
-        replaceFragment(favoriteBreedsFragment, "FAVORITES_ROOT");
+        replaceFragment(favouriteBreedsFragment, "FAVORITES_ROOT");
     }
 
     private void showBreedsFragment() {

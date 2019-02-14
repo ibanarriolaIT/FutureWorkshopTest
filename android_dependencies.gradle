@@ -34,7 +34,7 @@ rootProject.ext {
     restmockVersion = '0.3.1'
 
     junitVersion = '4.12'
-    mockitoVersion = '1.10.19'
+    mockitoVersion = '2.23.0'
     espressoCoreVersion = "3.0.1"
     testRunnerVersion = "1.0.1"
 

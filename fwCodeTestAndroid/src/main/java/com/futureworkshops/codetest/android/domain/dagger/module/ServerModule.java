@@ -2,7 +2,7 @@
  * Copyright (c) 2018 FutureWorkshops. All rights reserved.
  */
 
-package com.futureworkshops.codetest.android.domain.dagger;
+package com.futureworkshops.codetest.android.domain.dagger.module;
 
 import android.content.Context;
 

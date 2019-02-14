@@ -4,8 +4,12 @@ import android.support.annotation.UiThread;
 
 import java.lang.ref.WeakReference;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+
 public class BasePresenter<V extends BaseView> {
     protected WeakReference<V> view;
+    protected WeakReference<CompositeDisposable> subscriptions;
 
     @UiThread
     public void attachView(V view) {
@@ -15,6 +19,7 @@ public class BasePresenter<V extends BaseView> {
     @UiThread
     public void detachView() {
         clearView();
+        clearSubscriptions();
     }
 
     @UiThread
@@ -27,11 +32,32 @@ public class BasePresenter<V extends BaseView> {
         return view != null && view.get() != null;
     }
 
+    @UiThread
+    public void addSubscription(Disposable disposable) {
+        if (subscriptions == null) {
+            subscriptions = new WeakReference<>(new CompositeDisposable());
+        }
+        if (subscriptions.get() != null) {
+            subscriptions.get().add(disposable);
+        }
+    }
+
     private void clearView() {
         if (view == null) {
             return;
         }
         view.clear();
         view = null;
+    }
+
+    private void clearSubscriptions() {
+        if (subscriptions == null) {
+            return;
+        }
+        if (subscriptions.get() != null) {
+            subscriptions.get().dispose();
+        }
+        subscriptions.clear();
+        subscriptions = null;
     }
 }

@@ -1,7 +1,5 @@
 package com.futureworkshops.codetest.android.domain.repositories;
 
-import android.annotation.SuppressLint;
-
 import com.futureworkshops.codetest.android.data.network.RestManager;
 import com.futureworkshops.codetest.android.domain.model.Login;
 
@@ -15,7 +13,6 @@ public class LoginRepository {
         this.restManager = restManager;
     }
 
-    @SuppressLint("CheckResult")
     public Single<Login> performLogin(String user, String pass) {
         return restManager.login(user, pass);
     }
