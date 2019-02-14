@@ -1,132 +1,38 @@
 # FW Code Test Android
 
-## Goals
--  test knwledge of retrofit (custom converter factories, custom call adapter factories)
--  knwoledge of Realm / Room
--  ability to code a feature from the data layer to the UI layer
--  ability to respect existing conventions(style & architecture)
--  ability to test the code he writes
--  knwoledge of animation & transition techniques
--  ability to document code(especially in situations where it can create technical debt)
+## Design/Implementation decisions
 
-## Summary
-Candidates will receive a project that uses FW architecture choices and 3rd party dependencies that are most common to our daily use. On this project, he will have to complete a series of tasks that aim to validate his knowledge in the areas described above.
+### Login
+For the login screen I added a new condition in the RESTMockServer and add a success message if the user and password are the proper ones (hardcoded) and also different error messages depending if a field is empty (I handle it in the LoginActivity), if a user is incorrect or if the password is incorrect. I added hints in both fields with the proper user and password so it can be easy to enter
 
-Basically, we're using the olde code test format but improve it in order to remove the difficulties of setting up Twitter SDK or choosing an architecture pattern and focus on the coding skills and overall software development competencies.
+### BasePresenter and BaseView
+I created a generic `BasePresenter` class in order to handle the operations that all the presenter will have to do as attach a view when the activity/fragment is created, add disposable subscriptions every time a call to the server is made and detach view when changing activity/fragment. This `BasePresenter` will extend a `BaseView` interface that the activity/fragment will implement. The `attachView` method have to be a `BaseView` View. The `onInit` method will be use to attach the view and make the calls to the presenter that will have to be done on view creation.
 
-## Project details
+### Adapter reuse
+Since the data type used in `BreedListFragment` and `FavouriteFragment` is the same it has no sense to create 2 different adapters and 2 different layouts for that. So I decided to use the same layout for both fragments and the same adapter.
 
-A simple project that:
- - has a login screen (credentials will be hardcoded in a fake server)
- - displays a list of `Items`
- -  navigates to an Item detail screen
- -  from the details screen, users can mark an item as favorite / unfavourite
- -  favourite items are available offline, in a separate tab on the home screen
+### BreedDetailsFragment
+When you click on an image in both `BreedListFragment` and `FavouriteFragment` you go to this fragment so I had to implement different functionalities for each. I decided to do so because the appearance and functionalities are the same. The main differences are the following: 
+-If I am coming from `BreedListFragment` I get the stats from the mock server and I also have to check if it is favourite or not. 
+-If I am coming from `FavouriteFragment` I get the stats from room repository and I don't check if it is favourite or not because I know it is.
 
-### What will be implemented by us
- - project structure with MVP architecture and Dagger
- - fake server that provides custom data
- - network data source that uses the fake server
- - login screen(partially)
- - item list screen
+### Use cases
+I decided to add one layer more between the repository and the presenter for the the business logic so the repository will be just in charge of contacting with the server and returning its value and the presenter just have to get the result with the proper object and tell to the activity what he has to show. 
 
-### Candidate tasks
+### JSON and XML calls
+For the problem of having to use Retrofit with JSON and XML response, I created another rest manager (called `XMLRestManager`) to the one that it was created in the first version of the test. So the repository that will call the services who return XML format data will have this `XMLRestManager` and the ones that calls to services who return JSON data will call to `RestManager`. All this is managed using dagger. 
 
-#### 1. Implement a mechansim that propagates server errors to the UI
+### Room
+With the calls to the persistence data, in the usecase I added a find call before calling to add/remove to make sure that when I want to remove a breed this breed is in the room database. Otherwise when I want to add a breed, first I check that the breed was not already there. Once I know that I can add/remove data I make a `Completable.mergeArray` with to call to the `RoomRepository` 2 times, one to add the breed and the other to add its stats. This completable will only success if both operation succeed. Finally I also added error messages for the cases described.
 
-Our fake server needs to throw an error like: `{"error": "Email is not registered"}`. The candidate needs to implement a mechanism that will display this error message to the user via a Toast/ Snackbar.
-
-Expectations:
-
-- create a separate model for the exceptions coming from the server
--  create a domain exception model
--  create a custom exception
--  create a custom `CallAdapterFactory` that can propagate our custom exception to the repository level
--  repository should forward a domain exception model to interactors / presenters
-- view should have separate methods for displaying errors
-
-#### 2. Implement a mechansim that parses JSON and XML*
-
-The fake server needs to have an endpoint that will send XML data instead of JSON. The option to trigger the XML call will probably be placed in a menu item so we don't interfere with the general app flow.
-
-Candidates have to create a mechanism that is able to distinguish between the received content types and use the correct converter factory
-
-This tasks tests the knowledge of Retrofit as it requires candidates to deal with an unusual situation when working with a very common library.
-
-Ex:
-
-- `<endpoint>/items` - returns JSON content
-- `<endpoint>/recommandations` - returns XML content
-
-Expectations:
-
-- candiates can implement a working solution
-
-Ideal solution :
-
-- use custom annotations on the Retrofit service interface to determine content type
--  create a custom converter factory that uses GSON and SimpleXML internally
--  determine type of required content by checking the annotation and forward call to the correct converter factory
-
-#### 3. Implement local storage
-
-Candidates need to implement local storage for holding favourite `Items`. They can use `Realm` or `Room`.
-
-Expectations:
-
-- separate model used for local storage
-- use of Mappers for converting between domain model and persistence model
--  use of a wrapper over the persitence library(to make it easier to change the technology without upstream changes)
--   use of the persistence wrapper only at repository level (no presenter/interactor)
+### Error handling
+For error handling, I created an ErrorHandler class with a static method to convert a throwable in the message string that is stored in the error body of the response.
 
 
-#### 4. Update Item details screen
+## Used libraries
 
-Update item details screen to include functionality required to mark an item favourite.
+Besides de libraries provided in the initial version of the test, I also added the following libraries:
 
-Expectations:
-
-- wire UI button to mark an Item as favourite / unfavourite
-- attention to UI components
-- no hardcoded values in xml layout files
-- unit test for the presenter
-
-
-#### 5. Implement favourite Items screen
-
-Implement a simple screen that shows a list of favourite Items
-
-Expectations:
-
-- follow existing packaging strategy
-- create MVP components
-- Dagger module to inject dependencies
-- RecyclerView and adapter to show favourite items
-- unit test for the presenter
-
- ```(*)``` this is an optional task aimed at senior / lead level candidates
-
-## Extra points
-
-- using SharedElement transition when showing Item details screen
-- using AnimatedVectorDrawable for favourite / unfavourite actions
-- using overflow to dismiss ItemDetails screen
-- documenting design / implementation decisions in a README
-
-
-## Test strategy
-
-All candidates will receive the same test and will be asked to complete as much tasks as they can  in the given time frame.
-
-The test project will be written in Java but candidates are free to use Kotlin if they wish.
-
-## Scoring
-
-Each task(except for the advanced one) will receive a score from 1-10.
-Bonus tasks each add an extra 3 points
-Advanced Retrofit tasks add 4 points.
-
-To calculate the overall score, you sum the score from the completed tasks,add any points obtained from extra / advanced section and divide the whole thing to the number of completed tasks.
-
-This can be changed in the future as it does not affect the implementation of the code test.
-
+- Glide: I choose this library before Picasso because it consume less memory and is faster loading cache images. 
+- Room: This library also consumes less ram that Realm and the size of the library is smaller
+- DataBinding: This is not a library but with this I avoid to use ButterKnife in Fragments and in the RecyclerView adapter (in the Activities I used ButterKnife just to show I can use it as well). DataBinding allows me to decrease the code lines in the fragments and the adapter since I don't have to go one by one setting the data to my layout components. 
