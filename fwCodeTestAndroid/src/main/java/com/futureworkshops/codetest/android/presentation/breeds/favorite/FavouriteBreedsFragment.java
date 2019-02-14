@@ -12,6 +12,7 @@ import android.support.transition.Fade;
 import android.support.transition.TransitionInflater;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -65,7 +66,9 @@ public class FavouriteBreedsFragment extends DaggerFragment
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_breed_list, container, false);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.title_favorites);
+        ActionBar toolbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        toolbar.setTitle(R.string.title_favorites);
+        toolbar.setDisplayHomeAsUpEnabled(false);
         onInit();
         return binding.getRoot();
     }
