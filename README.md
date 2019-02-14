@@ -13,8 +13,8 @@ Since the data type used in `BreedListFragment` and `FavouriteFragment` is the s
 
 ### BreedDetailsFragment
 When you click on an image in both `BreedListFragment` and `FavouriteFragment` you go to this fragment so I had to implement different functionalities for each. I decided to do so because the appearance and functionalities are the same. The main differences are the following: 
--If I am coming from `BreedListFragment` I get the stats from the mock server and I also have to check if it is favourite or not. 
--If I am coming from `FavouriteFragment` I get the stats from room repository and I don't check if it is favourite or not because I know it is.
+- If I am coming from `BreedListFragment` I get the stats from the mock server and I also have to check if it is favourite or not. 
+- If I am coming from `FavouriteFragment` I get the stats from room repository and I don't check if it is favourite or not because I know it is.
 
 ### Use cases
 I decided to add one layer more between the repository and the presenter for the the business logic so the repository will be just in charge of contacting with the server and returning its value and the presenter just have to get the result with the proper object and tell to the activity what he has to show. 
