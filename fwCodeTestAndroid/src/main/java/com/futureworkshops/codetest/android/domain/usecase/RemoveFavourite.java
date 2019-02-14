@@ -1,6 +1,5 @@
 package com.futureworkshops.codetest.android.domain.usecase;
 
-import com.futureworkshops.codetest.android.data.persistence.BreedEntity;
 import com.futureworkshops.codetest.android.domain.model.Breed;
 import com.futureworkshops.codetest.android.domain.repositories.RoomRepository;
 

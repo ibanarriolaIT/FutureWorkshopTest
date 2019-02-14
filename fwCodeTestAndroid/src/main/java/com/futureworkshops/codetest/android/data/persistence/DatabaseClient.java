@@ -8,7 +8,7 @@ public class DatabaseClient {
 
     private BreedDatabase breedDatabase;
 
-    public DatabaseClient(Context context){
+    public DatabaseClient(Context context) {
         breedDatabase = Room.databaseBuilder(context, BreedDatabase.class, "DataBase").build();
     }
 

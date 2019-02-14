@@ -14,7 +14,7 @@ public class GetBreedsList {
         this.breedRepository = breedRepository;
     }
 
-    public Single<List<Breed>> execute(){
+    public Single<List<Breed>> execute() {
         return breedRepository.getBreeds().toObservable().flatMapIterable(breedDtos -> breedDtos)
                 .map(breedDto -> Breed.builder()
                         .id(breedDto.getId())

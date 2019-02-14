@@ -1,7 +1,5 @@
 package com.futureworkshops.codetest.android.presentation.login;
 
-import android.annotation.SuppressLint;
-
 import com.futureworkshops.codetest.android.domain.repositories.LoginRepository;
 import com.futureworkshops.codetest.android.presentation.common.BasePresenter;
 import com.futureworkshops.codetest.android.presentation.common.BaseView;
@@ -19,7 +17,6 @@ public class LoginPresenter extends BasePresenter {
         this.loginRepository = loginRepository;
     }
 
-    @SuppressLint("CheckResult")
     public void performLogin(String user, String pass) {
         Disposable disposable = loginRepository.performLogin(user, pass)
                 .subscribeOn(Schedulers.io())

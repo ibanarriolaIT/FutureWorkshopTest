@@ -9,7 +9,7 @@ import io.reactivex.disposables.Disposable;
 
 public class BasePresenter<V extends BaseView> {
     protected WeakReference<V> view;
-    protected WeakReference<CompositeDisposable> subscriptions;
+    private WeakReference<CompositeDisposable> subscriptions;
 
     @UiThread
     public void attachView(V view) {
@@ -33,7 +33,7 @@ public class BasePresenter<V extends BaseView> {
     }
 
     @UiThread
-    public void addSubscription(Disposable disposable) {
+    protected void addSubscription(Disposable disposable) {
         if (subscriptions == null) {
             subscriptions = new WeakReference<>(new CompositeDisposable());
         }

@@ -11,20 +11,19 @@ import android.support.design.widget.BottomNavigationView.OnNavigationItemResele
 import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.futureworkshops.codetest.android.R;
 import com.futureworkshops.codetest.android.presentation.breeds.favorite.FavouriteBreedsFragment;
 import com.futureworkshops.codetest.android.presentation.breeds.list.view.BreedsListFragment;
-import com.futureworkshops.codetest.android.presentation.common.BaseView;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import dagger.android.support.DaggerAppCompatActivity;
 import timber.log.Timber;
 
@@ -70,6 +69,9 @@ public class MainActivity extends DaggerAppCompatActivity implements
             case R.id.important_action:
                 mainPresenter.callImportantOperation();
                 break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -78,6 +80,7 @@ public class MainActivity extends DaggerAppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         switch (item.getItemId()) {
             case R.id.action_show_breeds:
                 Timber.d("select breeds");
@@ -88,7 +91,6 @@ public class MainActivity extends DaggerAppCompatActivity implements
                 showFavoritesFragment();
                 break;
         }
-
         return true;
     }
 
@@ -108,22 +110,20 @@ public class MainActivity extends DaggerAppCompatActivity implements
         if (favouriteBreedsFragment == null) {
             favouriteBreedsFragment = FavouriteBreedsFragment.newInstance();
         }
-
         replaceFragment(favouriteBreedsFragment, "FAVORITES_ROOT");
     }
 
     private void showBreedsFragment() {
         if (breedsListFragment == null) {
             breedsListFragment = BreedsListFragment.newInstance();
-
         }
-
         replaceFragment(breedsListFragment, "BREEDS_ROOT");
     }
 
     private void replaceFragment(Fragment fragment, String tag) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, fragment, tag)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
     }
 

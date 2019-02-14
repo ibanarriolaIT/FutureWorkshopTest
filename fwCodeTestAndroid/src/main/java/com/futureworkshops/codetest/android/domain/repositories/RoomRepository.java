@@ -1,7 +1,5 @@
 package com.futureworkshops.codetest.android.domain.repositories;
 
-import android.annotation.SuppressLint;
-
 import com.futureworkshops.codetest.android.data.network.rx.scheduler.SchedulersProvider;
 import com.futureworkshops.codetest.android.data.network.rx.transformers.CompletableWorkerTransformer;
 import com.futureworkshops.codetest.android.data.network.rx.transformers.SingleWorkerTransformer;

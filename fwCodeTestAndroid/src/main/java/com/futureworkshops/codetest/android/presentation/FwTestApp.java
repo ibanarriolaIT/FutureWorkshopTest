@@ -4,9 +4,9 @@
 
 package com.futureworkshops.codetest.android.presentation;
 
-import android.app.Application;
 import android.support.annotation.NonNull;
 import android.util.Log;
+
 import com.futureworkshops.codetest.android.BuildConfig;
 import com.futureworkshops.codetest.android.data.network.server.MockServer;
 import com.futureworkshops.codetest.android.domain.dagger.ApplicationComponent;

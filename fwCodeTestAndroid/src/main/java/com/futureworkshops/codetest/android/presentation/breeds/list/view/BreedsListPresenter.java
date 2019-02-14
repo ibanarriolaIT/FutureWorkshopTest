@@ -1,7 +1,5 @@
 package com.futureworkshops.codetest.android.presentation.breeds.list.view;
 
-import android.annotation.SuppressLint;
-
 import com.futureworkshops.codetest.android.domain.model.Breed;
 import com.futureworkshops.codetest.android.domain.usecase.GetBreedsList;
 import com.futureworkshops.codetest.android.presentation.common.BasePresenter;
@@ -19,7 +17,6 @@ public class BreedsListPresenter extends BasePresenter {
         this.getBreedsList = getBreedsList;
     }
 
-    @SuppressLint("CheckResult")
     public void getBreedListItems() {
         Disposable disposable = getBreedsList.execute()
                 .subscribe(breeds -> ((View) getView()).onGetBreedListItems(breeds),

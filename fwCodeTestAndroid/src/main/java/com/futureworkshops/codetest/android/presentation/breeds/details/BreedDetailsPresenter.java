@@ -1,7 +1,5 @@
 package com.futureworkshops.codetest.android.presentation.breeds.details;
 
-import android.annotation.SuppressLint;
-
 import com.futureworkshops.codetest.android.domain.model.Breed;
 import com.futureworkshops.codetest.android.domain.model.BreedStats;
 import com.futureworkshops.codetest.android.domain.usecase.AddFavourite;
@@ -12,9 +10,7 @@ import com.futureworkshops.codetest.android.presentation.common.BasePresenter;
 import com.futureworkshops.codetest.android.presentation.common.BaseView;
 import com.futureworkshops.codetest.android.presentation.utils.ErrorHandler;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class BreedDetailsPresenter extends BasePresenter {
 
@@ -30,31 +26,27 @@ public class BreedDetailsPresenter extends BasePresenter {
         this.removeFavourite = removeFavourite;
     }
 
-    @SuppressLint("CheckResult")
     public void checkIsFavourite(long id) {
         Disposable disposable = checkIsFavourite.execute(id)
-                .subscribe(isFavourite -> ((View) getView()).setFavourite(isFavourite),
+                .subscribe(isFavourite -> ((View) getView()).setFavourite(isFavourite, false),
                         throwable -> ((View) getView()).onError(ErrorHandler.getErrorMessage(throwable)));
         addSubscription(disposable);
     }
 
-    @SuppressLint("CheckResult")
     public void addToFavourites(Breed breed) {
         Disposable disposable = addFavourite.execute(breed)
-                .subscribe(() -> ((View) getView()).setFavourite(true),
+                .subscribe(() -> ((View) getView()).setFavourite(true, true),
                         throwable -> ((View) getView()).onError(ErrorHandler.getErrorMessage(throwable)));
         addSubscription(disposable);
     }
 
-    @SuppressLint("CheckResult")
     public void removeFromFavourites(Breed breed) {
         Disposable disposable = removeFavourite.execute(breed)
-                .subscribe(() -> ((View) getView()).setFavourite(false),
+                .subscribe(() -> ((View) getView()).setFavourite(false, true),
                         throwable -> ((View) getView()).onError(ErrorHandler.getErrorMessage(throwable)));
         addSubscription(disposable);
     }
 
-    @SuppressLint("CheckResult")
     public void checkBreedDetails(long id) {
         Disposable disposable = getBreedStats.execute((int) id)
                 .subscribe(breedStats -> ((View) getView()).onStatsSuccess(breedStats),
@@ -63,7 +55,7 @@ public class BreedDetailsPresenter extends BasePresenter {
     }
 
     public interface View extends BaseView {
-        void setFavourite(boolean isFavourite);
+        void setFavourite(boolean isFavourite, boolean informUser);
 
         void onStatsSuccess(BreedStats breedStats);
 

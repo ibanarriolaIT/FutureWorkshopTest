@@ -1,7 +1,7 @@
 package com.futureworkshops.codetest.android.domain.dagger;
 
-import com.futureworkshops.codetest.android.domain.dagger.module.RoomModule;
 import com.futureworkshops.codetest.android.domain.dagger.module.NetModule;
+import com.futureworkshops.codetest.android.domain.dagger.module.RoomModule;
 import com.futureworkshops.codetest.android.domain.dagger.module.ServerModule;
 import com.futureworkshops.codetest.android.presentation.FwTestApp;
 

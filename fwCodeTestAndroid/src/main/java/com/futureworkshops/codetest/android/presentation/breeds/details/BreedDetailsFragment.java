@@ -11,7 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,8 +30,6 @@ import com.futureworkshops.codetest.android.domain.model.BreedStats;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import dagger.android.support.DaggerFragment;
 
 
@@ -43,8 +41,8 @@ public class BreedDetailsFragment extends DaggerFragment
     private boolean isFavourite;
     private Breed breed;
     private FragmentBreedDetailsBinding binding;
-    private AnimatedVectorDrawable crossAnimatedDrawable;
-    private AnimatedVectorDrawable checkAnimatedDrawable;
+    private AnimatedVectorDrawable favouriteAnimatedDrawable;
+    private AnimatedVectorDrawable nonFavouriteAnimatedDrawable;
 
     @Inject
     BreedDetailsPresenter breedDetailsPresenter;
@@ -80,22 +78,24 @@ public class BreedDetailsFragment extends DaggerFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_breed_details, container, false);
-        View view = binding.getRoot();
         Bundle bundle = getArguments();
         breed = bundle.getParcelable(ARG_BREED);
         binding.setBreed(breed);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.title_details, breed.name()));
         String transitionName = getArguments().getString(TRANSITION_NAME);
         binding.breedImage.setTransitionName(transitionName);
-        ButterKnife.bind(this, view);
         onInit();
-        setUpAnimator();
-        return view;
+        setUpFavourite();
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ActionBar toolbar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        toolbar.setTitle(getString(R.string.title_details, breed.name()));
+        toolbar.setDisplayHomeAsUpEnabled(true);
+
+        //When glide loads the image start with the transition
         Glide.with(getContext())
                 .load(breed.photoUrl())
                 .listener(new RequestListener<Drawable>() {
@@ -127,8 +127,21 @@ public class BreedDetailsFragment extends DaggerFragment
     }
 
     @Override
-    public void setFavourite(boolean isFavourite) {
-        changeFavourite(isFavourite);
+    public void setFavourite(boolean isFavourite, boolean informUser) {
+        this.isFavourite = isFavourite;
+        String message;
+        if (isFavourite) {
+            binding.fab.setImageDrawable(favouriteAnimatedDrawable);
+            ((AnimatedVectorDrawable) binding.fab.getDrawable()).start();
+            message = getString(R.string.added_favourite);
+        } else {
+            binding.fab.setImageDrawable(nonFavouriteAnimatedDrawable);
+            ((AnimatedVectorDrawable) binding.fab.getDrawable()).start();
+            message = getString(R.string.remove_favourite);
+        }
+        if (informUser) {
+            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -141,7 +154,6 @@ public class BreedDetailsFragment extends DaggerFragment
         Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
     }
 
-    @OnClick(R.id.fab)
     public void modifyFavourites(View view) {
         if (isFavourite) {
             breedDetailsPresenter.removeFromFavourites(breed);
@@ -150,21 +162,12 @@ public class BreedDetailsFragment extends DaggerFragment
         }
     }
 
-    private void changeFavourite(boolean isFavourite) {
-        this.isFavourite = isFavourite;
-        if (isFavourite) {
-            binding.fab.setImageDrawable(crossAnimatedDrawable);
-            ((AnimatedVectorDrawable) binding.fab.getDrawable()).start();
-        } else {
-            binding.fab.setImageDrawable(checkAnimatedDrawable);
-            ((AnimatedVectorDrawable) binding.fab.getDrawable()).start();
-        }
-    }
-
-    private void setUpAnimator() {
-        crossAnimatedDrawable =
+    //animations for the favourite button
+    private void setUpFavourite() {
+        binding.fab.setOnClickListener(this::modifyFavourites);
+        favouriteAnimatedDrawable =
                 (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.white_heart_animation, getActivity().getTheme());
-        checkAnimatedDrawable =
+        nonFavouriteAnimatedDrawable =
                 (AnimatedVectorDrawable) getResources().getDrawable(R.drawable.empty_heart_animation, getActivity().getTheme());
     }
 }

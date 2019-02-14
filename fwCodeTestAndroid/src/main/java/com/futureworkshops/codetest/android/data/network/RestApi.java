@@ -17,10 +17,10 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface RestApi {
-    
+
     @GET("breeds")
     Single<BreedsListDto> getBreeds();
-    
+
     @GET("stats/{id}")
     Single<BreedStatsDto> getStats(@Path("id") long id);
 

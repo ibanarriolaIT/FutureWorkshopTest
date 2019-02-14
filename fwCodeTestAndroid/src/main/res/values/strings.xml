@@ -11,6 +11,8 @@
    <string name="login">Login</string>
    <string name="user_hint">iban</string>
    <string name="pass_hint">12345678</string>
+   <string name="added_favourite">Added to favourites</string>
+   <string name="remove_favourite">Removed from favourites</string>
    <string name="login_empty">You must fill empty fields</string>
    <string name="stats">Stats</string>
    <string name="adaptability">Adaptability: %s</string>

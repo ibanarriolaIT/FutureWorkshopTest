@@ -4,6 +4,7 @@
 package com.futureworkshops.codetest.android.domain.model;
 
 import android.os.Parcelable;
+
 import com.google.auto.value.AutoValue;
 
 @AutoValue

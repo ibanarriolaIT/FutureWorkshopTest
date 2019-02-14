@@ -5,19 +5,19 @@
 package com.futureworkshops.codetest.android.data.network;
 
 import android.support.annotation.NonNull;
+
 import com.futureworkshops.codetest.android.data.network.dto.BreedDto;
-import com.futureworkshops.codetest.android.data.network.dto.BreedStatsDto;
 import com.futureworkshops.codetest.android.data.network.dto.BreedsListDto;
 import com.futureworkshops.codetest.android.data.network.rx.scheduler.SchedulersProvider;
 import com.futureworkshops.codetest.android.data.network.rx.transformers.CompletableWorkerTransformer;
 import com.futureworkshops.codetest.android.data.network.rx.transformers.SingleWorkerTransformer;
 import com.futureworkshops.codetest.android.domain.model.Login;
 
+import java.util.List;
+
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import retrofit2.Retrofit;
-
-import java.util.List;
 
 public class RestManager {
 

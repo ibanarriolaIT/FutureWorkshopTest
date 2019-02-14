@@ -17,7 +17,6 @@ import io.appflate.restmock.android.AndroidLogger;
 import okhttp3.mockwebserver.MockResponse;
 
 import static io.appflate.restmock.utils.RequestMatchers.pathContains;
-import static io.appflate.restmock.utils.RequestMatchers.pathDoesNotContain;
 
 
 public class MockServer {
@@ -68,9 +67,15 @@ public class MockServer {
                                     .setBody("{ \"resut\" : \"success\" }")
                                     .setBodyDelay(DELAY_SEC, TimeUnit.SECONDS);
                         }
+                        if (request.getPath().contains("user=iban&")) {
+                            return new MockResponse()
+                                    .setResponseCode(401)
+                                    .setBody("{\"error\": \"incorrect password\"}")
+                                    .setBodyDelay(DELAY_SEC, TimeUnit.SECONDS);
+                        }
                         return new MockResponse()
                                 .setResponseCode(401)
-                                .setBody("{\"error\": \"incorrect username or password\"}")
+                                .setBody("{\"error\": \"username does not exist\"}")
                                 .setBodyDelay(DELAY_SEC, TimeUnit.SECONDS);
 
                     } catch (Exception e) {

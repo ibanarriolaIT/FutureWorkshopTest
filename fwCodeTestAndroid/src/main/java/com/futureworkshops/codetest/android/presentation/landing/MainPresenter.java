@@ -6,6 +6,7 @@ import com.futureworkshops.codetest.android.presentation.common.BaseView;
 import com.futureworkshops.codetest.android.presentation.utils.ErrorHandler;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenter extends BasePresenter {
@@ -17,11 +18,12 @@ public class MainPresenter extends BasePresenter {
     }
 
     public void callImportantOperation() {
-        importantOperationRepository.performImportantOperation()
+        Disposable disposable = importantOperationRepository.performImportantOperation()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> ((View) getView()).onImportantOperationOk(),
                         throwable -> ((View) getView()).onImportantOperationError(ErrorHandler.getErrorMessage(throwable)));
+        addSubscription(disposable);
     }
 
     public interface View extends BaseView {
