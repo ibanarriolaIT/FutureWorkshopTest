@@ -8,6 +8,7 @@ import com.futureworkshops.codetest.android.domain.repositories.RoomRepository;
 import com.futureworkshops.codetest.android.domain.usecase.AddFavourite;
 import com.futureworkshops.codetest.android.domain.usecase.CheckIsFavourite;
 import com.futureworkshops.codetest.android.domain.usecase.GetFavouriteBreeds;
+import com.futureworkshops.codetest.android.domain.usecase.GetFavouriteStats;
 import com.futureworkshops.codetest.android.domain.usecase.RemoveFavourite;
 
 import javax.inject.Singleton;
@@ -52,5 +53,11 @@ public class RoomModule {
     @Singleton
     GetFavouriteBreeds providesGetFavouriteBreeds(RoomRepository roomRepository) {
         return new GetFavouriteBreeds(roomRepository);
+    }
+
+    @Provides
+    @Singleton
+    GetFavouriteStats providesGetFavouriteStats(RoomRepository roomRepository) {
+        return new GetFavouriteStats(roomRepository);
     }
 }

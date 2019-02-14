@@ -9,6 +9,7 @@ import com.futureworkshops.codetest.android.domain.usecase.CheckIsFavourite;
 import com.futureworkshops.codetest.android.domain.usecase.GetBreedStats;
 import com.futureworkshops.codetest.android.domain.usecase.GetBreedsList;
 import com.futureworkshops.codetest.android.domain.usecase.GetFavouriteBreeds;
+import com.futureworkshops.codetest.android.domain.usecase.GetFavouriteStats;
 import com.futureworkshops.codetest.android.domain.usecase.RemoveFavourite;
 import com.futureworkshops.codetest.android.presentation.breeds.details.BreedDetailsPresenter;
 import com.futureworkshops.codetest.android.presentation.breeds.favorite.FavouriteBreedsPresenter;
@@ -42,8 +43,9 @@ public class ViewsModule {
     @Provides
 
     @PerFragment
-    BreedDetailsPresenter providesBreedDetailsPresenter(GetBreedStats getBreedStats, CheckIsFavourite checkIsFavourite, AddFavourite addFavourite, RemoveFavourite removeFavourite) {
-        return new BreedDetailsPresenter(getBreedStats, checkIsFavourite, addFavourite, removeFavourite);
+    BreedDetailsPresenter providesBreedDetailsPresenter(GetBreedStats getBreedStats, CheckIsFavourite checkIsFavourite,
+                                                        AddFavourite addFavourite, RemoveFavourite removeFavourite, GetFavouriteStats getFavouriteStats) {
+        return new BreedDetailsPresenter(getBreedStats, checkIsFavourite, addFavourite, removeFavourite, getFavouriteStats);
     }
 
     @Provides

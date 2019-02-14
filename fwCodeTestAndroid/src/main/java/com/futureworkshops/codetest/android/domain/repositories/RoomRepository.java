@@ -6,6 +6,7 @@ import com.futureworkshops.codetest.android.data.network.rx.transformers.SingleW
 import com.futureworkshops.codetest.android.data.persistence.BreedDao;
 import com.futureworkshops.codetest.android.data.persistence.BreedEntity;
 import com.futureworkshops.codetest.android.data.persistence.DatabaseClient;
+import com.futureworkshops.codetest.android.data.persistence.StatsEntity;
 
 import java.util.List;
 
@@ -39,6 +40,21 @@ public class RoomRepository {
 
     public Completable deleteBreed(BreedEntity breedEntity) {
         return Completable.fromAction(() -> roomDatabase.delete(breedEntity))
+                .compose(new CompletableWorkerTransformer(schedulersProvider));
+    }
+
+    public Single<StatsEntity> findStatsEntity(long id) {
+        return roomDatabase.findStats(id)
+                .compose(new SingleWorkerTransformer<>(schedulersProvider));
+    }
+
+    public Completable insertStats(StatsEntity statsEntity) {
+        return Completable.fromAction(() -> roomDatabase.insert(statsEntity))
+                .compose(new CompletableWorkerTransformer(schedulersProvider));
+    }
+
+    public Completable deleteStats(StatsEntity statsEntity) {
+        return Completable.fromAction(() -> roomDatabase.delete(statsEntity))
                 .compose(new CompletableWorkerTransformer(schedulersProvider));
     }
 }

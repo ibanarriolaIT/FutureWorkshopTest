@@ -24,4 +24,13 @@ public interface BreedDao {
 
     @Delete
     void delete(BreedEntity breedEntity);
+
+    @Query("SELECT * FROM statsentity WHERE id = :id")
+    Single<StatsEntity> findStats(long id);
+
+    @Insert
+    void insert(StatsEntity statsEntity);
+
+    @Delete
+    void delete(StatsEntity statsEntity);
 }

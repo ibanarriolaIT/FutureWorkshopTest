@@ -88,7 +88,7 @@ public class BreedsListFragment extends DaggerFragment
 
     @Override
     public void onMessageItemClick(Breed breed, ImageView view) {
-        BreedDetailsFragment breedDetailsFragment = BreedDetailsFragment.newInstance(breed, ViewCompat.getTransitionName(view));
+        BreedDetailsFragment breedDetailsFragment = BreedDetailsFragment.newInstance(breed, ViewCompat.getTransitionName(view), false);
         breedDetailsFragment.setSharedElementEnterTransition(TransitionInflater.from(getContext()).inflateTransition(android.R.transition.move));
         breedDetailsFragment.setEnterTransition(new Fade());
         setExitTransition(new Fade());

@@ -38,8 +38,10 @@ public class BreedDetailsFragment extends DaggerFragment
 
     private static final String ARG_BREED = "breed";
     private static final String TRANSITION_NAME = "transition_name";
+    private static final String IS_FAVOURITE = "is_favourite";
     private boolean isFavourite;
     private Breed breed;
+    private BreedStats breedStats;
     private FragmentBreedDetailsBinding binding;
     private AnimatedVectorDrawable favouriteAnimatedDrawable;
     private AnimatedVectorDrawable nonFavouriteAnimatedDrawable;
@@ -58,11 +60,12 @@ public class BreedDetailsFragment extends DaggerFragment
      * @param breed Parameter 1.
      * @return A new instance of fragment BreedDetailsFragment.
      */
-    public static BreedDetailsFragment newInstance(Breed breed, String transitionName) {
+    public static BreedDetailsFragment newInstance(Breed breed, String transitionName, boolean isFavourite) {
         BreedDetailsFragment fragment = new BreedDetailsFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_BREED, breed);
         args.putString(TRANSITION_NAME, transitionName);
+        args.putBoolean(IS_FAVOURITE, isFavourite);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,8 +86,8 @@ public class BreedDetailsFragment extends DaggerFragment
         binding.setBreed(breed);
         String transitionName = getArguments().getString(TRANSITION_NAME);
         binding.breedImage.setTransitionName(transitionName);
-        onInit();
         setUpFavourite();
+        onInit();
         return binding.getRoot();
     }
 
@@ -122,8 +125,13 @@ public class BreedDetailsFragment extends DaggerFragment
     @Override
     public void onInit() {
         breedDetailsPresenter.attachView(this);
-        breedDetailsPresenter.checkIsFavourite(breed.id());
-        breedDetailsPresenter.checkBreedDetails(breed.id());
+        if (getArguments().getBoolean(IS_FAVOURITE)) {
+            breedDetailsPresenter.getFavouriteStats(breed.id());
+            setFavourite(true, false);
+        } else {
+            breedDetailsPresenter.checkIsFavourite(breed.id());
+            breedDetailsPresenter.checkBreedDetails(breed.id());
+        }
     }
 
     @Override
@@ -146,6 +154,7 @@ public class BreedDetailsFragment extends DaggerFragment
 
     @Override
     public void onStatsSuccess(BreedStats breedStats) {
+        this.breedStats = breedStats;
         binding.setStats(breedStats);
     }
 
@@ -156,9 +165,9 @@ public class BreedDetailsFragment extends DaggerFragment
 
     public void modifyFavourites(View view) {
         if (isFavourite) {
-            breedDetailsPresenter.removeFromFavourites(breed);
+            breedDetailsPresenter.removeFromFavourites(breed, breedStats);
         } else {
-            breedDetailsPresenter.addToFavourites(breed);
+            breedDetailsPresenter.addToFavourites(breed, breedStats);
         }
     }
 
