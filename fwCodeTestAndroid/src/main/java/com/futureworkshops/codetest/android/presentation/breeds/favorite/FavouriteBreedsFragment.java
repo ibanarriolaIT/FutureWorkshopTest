@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -89,7 +90,7 @@ public class FavouriteBreedsFragment extends DaggerFragment
     public void onGetFavourites(List<Breed> breeds) {
         binding.swipeRefreshLayout.setRefreshing(false);
         BreedsListAdapter adapter = new BreedsListAdapter(breeds);
-        RecyclerView.LayoutManager listLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        RecyclerView.LayoutManager listLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         binding.recyclerView.setLayoutManager(listLayoutManager);
         adapter.setOnItemClickListener(this);
         binding.recyclerView.setAdapter(adapter);
