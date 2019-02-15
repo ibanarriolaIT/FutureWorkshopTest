@@ -45,6 +45,9 @@
          android:id="@+id/login_button"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
+         android:layout_marginTop="@dimen/small_margin"
+         android:textColor="@android:color/white"
+         android:background="@drawable/round_red_button"
          android:text="@string/login" />
 
    </LinearLayout>

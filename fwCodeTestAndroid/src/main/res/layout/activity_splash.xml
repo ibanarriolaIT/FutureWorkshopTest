@@ -13,8 +13,8 @@
   
   <com.github.jorgecastillo.FillableLoader
     android:id="@+id/fillableLoader"
-    android:layout_width="200dp"
-    android:layout_height="200dp"
+    android:layout_width="@dimen/splash_image_size"
+    android:layout_height="@dimen/splash_image_size"
     app:fl_clippingTransform="waves"
     app:fl_fillColor="@color/splash_fill_color"
     app:fl_fillDuration="@integer/fill_duration"
