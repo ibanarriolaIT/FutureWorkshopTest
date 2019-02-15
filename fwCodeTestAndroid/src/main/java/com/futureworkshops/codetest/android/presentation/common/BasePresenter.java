@@ -34,7 +34,7 @@ public class BasePresenter<V extends BaseView> {
 
     @UiThread
     protected void addSubscription(Disposable disposable) {
-        if (subscriptions == null) {
+        if (subscriptions == null || subscriptions.get() == null) {
             subscriptions = new WeakReference<>(new CompositeDisposable());
         }
         if (subscriptions.get() != null) {

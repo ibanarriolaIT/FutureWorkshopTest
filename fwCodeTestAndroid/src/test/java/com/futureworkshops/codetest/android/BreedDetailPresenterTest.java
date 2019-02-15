@@ -5,6 +5,7 @@ import com.futureworkshops.codetest.android.domain.model.BreedStats;
 import com.futureworkshops.codetest.android.domain.usecase.AddFavourite;
 import com.futureworkshops.codetest.android.domain.usecase.CheckIsFavourite;
 import com.futureworkshops.codetest.android.domain.usecase.GetBreedStats;
+import com.futureworkshops.codetest.android.domain.usecase.GetFavouriteStats;
 import com.futureworkshops.codetest.android.domain.usecase.RemoveFavourite;
 import com.futureworkshops.codetest.android.presentation.breeds.details.BreedDetailsPresenter;
 
@@ -26,6 +27,7 @@ public class BreedDetailPresenterTest {
     CheckIsFavourite checkIsFavourite = Mockito.mock(CheckIsFavourite.class);
     AddFavourite addFavourite = Mockito.mock(AddFavourite.class);
     RemoveFavourite removeFavourite = Mockito.mock(RemoveFavourite.class);
+    GetFavouriteStats getFavouriteStats = Mockito.mock(GetFavouriteStats.class);
     BreedDetailsPresenter.View view = Mockito.mock(BreedDetailsPresenter.View.class);
 
     @InjectMocks
@@ -47,7 +49,7 @@ public class BreedDetailPresenterTest {
         when(checkIsFavourite.execute(1)).thenReturn(booleanPublishSubject.take(1).singleOrError());
         breedDetailsPresenter.checkIsFavourite(1);
         booleanPublishSubject.onNext(true);
-        verify(view).setFavourite(true);
+        verify(view).setFavourite(true, false);
     }
 
     @Test
@@ -55,27 +57,35 @@ public class BreedDetailPresenterTest {
         when(checkIsFavourite.execute(1)).thenReturn(booleanPublishSubject.take(1).singleOrError());
         breedDetailsPresenter.checkIsFavourite(1);
         booleanPublishSubject.onNext(false);
-        verify(view).setFavourite(false);
+        verify(view).setFavourite(false, false);
     }
 
     @Test
     public void testAddToFavourite() {
-        when(addFavourite.execute(breed)).thenReturn(Completable.complete());
-        breedDetailsPresenter.addToFavourites(breed);
-        verify(view).setFavourite(true);
+        when(addFavourite.execute(breed, breedStats)).thenReturn(Completable.complete());
+        breedDetailsPresenter.addToFavourites(breed, breedStats);
+        verify(view).setFavourite(true, true);
     }
 
     @Test
     public void testRemoveFromFavourite() {
-        when(removeFavourite.execute(breed)).thenReturn(Completable.complete());
-        breedDetailsPresenter.removeFromFavourites(breed);
-        verify(view).setFavourite(false);
+        when(removeFavourite.execute(breed, breedStats)).thenReturn(Completable.complete());
+        breedDetailsPresenter.removeFromFavourites(breed, breedStats);
+        verify(view).setFavourite(false, true);
     }
 
     @Test
     public void testCheckBreedDetails() {
         when(getBreedStats.execute(1)).thenReturn(breedStatsPublishSubject.take(1).singleOrError());
         breedDetailsPresenter.checkBreedDetails(1);
+        breedStatsPublishSubject.onNext(breedStats);
+        verify(view).onStatsSuccess(breedStats);
+    }
+
+    @Test
+    public void testGetFavouriteStats() {
+        when(getFavouriteStats.execute(1)).thenReturn(breedStatsPublishSubject.take(1).singleOrError());
+        breedDetailsPresenter.getFavouriteStats(1);
         breedStatsPublishSubject.onNext(breedStats);
         verify(view).onStatsSuccess(breedStats);
     }
